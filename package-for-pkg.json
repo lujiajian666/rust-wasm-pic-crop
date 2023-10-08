@@ -1,0 +1,13 @@
+{
+    "name": "clip_pic",
+    "description": null,
+    "version": "0.1.0",
+    "license": null,
+    "repository": null,
+    "files": [
+        "clip_pic_bg.wasm",
+        "clip_pic.d.ts"
+    ],
+    "main": "clip_pic.js",
+    "types": "clip_pic.d.ts"
+}
