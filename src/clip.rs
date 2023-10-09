@@ -33,7 +33,7 @@ fn get_image_as_base64(_img: DynamicImage, format: ImageFormat) -> String {
     let together = format!("{}{}", "data:image/png;base64,", stt);
     return together;
 }
-pub fn append_img(image_src: String) -> Result<(), JsValue> {
+fn append_img(image_src: String) -> Result<(), JsValue> {
     let window = web_sys::window().expect("no global `window` exists");
     let document = window.document().expect("should have a document on window");
     let body = document.body().expect("document should have a body");
@@ -43,7 +43,7 @@ pub fn append_img(image_src: String) -> Result<(), JsValue> {
     body.append_child(&val)?;
     Ok(())
 }
-pub fn set_dom_attr(selectors: &str, attr: &str, value: String) {
+fn set_dom_attr(selectors: &str, attr: &str, value: String) {
     let window = web_sys::window().expect("no global `window` exists");
     let document = window.document().expect("should have a document on window");
     let target = document
@@ -54,28 +54,23 @@ pub fn set_dom_attr(selectors: &str, attr: &str, value: String) {
 }
 
 #[wasm_bindgen]
-pub fn grayscale(_array: &[u8]) -> Result<(), JsValue> {
+pub fn grayscale(_array: &[u8]) -> Result<String, JsValue> {
     let format = image::guess_format(_array).expect("can not read pic format");
     let mut img = load_image_from_array(_array);
     img = img.grayscale();
-    let base64_str = get_image_as_base64(img, format);
-    return append_img(base64_str);
+    Ok(get_image_as_base64(img, format))
 }
 
 #[wasm_bindgen]
 pub fn crop(
     _array: &[u8],
-    dom_select: String,
-    attr: String,
     top_left_x: u32,
     top_left_y: u32,
     height: u32,
     width: u32,
-) -> Result<(), JsValue> {
+) -> Result<String, JsValue> {
     let format = image::guess_format(_array).expect("can not read pic format");
     let mut img = load_image_from_array(_array);
     img = img.crop(top_left_x, top_left_y, width, height);
-    let base64_str = get_image_as_base64(img, format);
-    set_dom_attr(dom_select.as_str(), attr.as_str(), base64_str);
-    Ok(())
+    Ok(get_image_as_base64(img, format))
 }

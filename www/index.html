@@ -13,7 +13,8 @@
     <input type="file" id="files" style="display: none" onchange="fileImport()">
     <input type="button" id="choosefile" value="选择一张彩色的png图片">
   </div>
-  <img id="preview-img">
+  <img id="preview-img-1">
+  <img id="preview-img-2">
   <script src="./bootstrap.js"></script>
   <script>
     document.getElementById("choosefile").onclick = function () {
@@ -27,8 +28,10 @@
       reader.onload = function () {
         var uint8Array = new Uint8Array(this.result);
         window.u8Var = uint8Array;
-        wasm.grayscale(uint8Array);
-        wasm.crop(uint8Array, "#preview-img", "src", 0, 0, 200, 200);
+        let data1 = wasm.grayscale(uint8Array);
+        let data2 = wasm.crop(uint8Array, 0, 0, 200, 200);
+        document.querySelector("#preview-img-1").src = data1;
+        document.querySelector("#preview-img-2").src = data2;
       }
     }
   </script>

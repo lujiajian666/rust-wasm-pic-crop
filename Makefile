@@ -1,6 +1,10 @@
 .PHONY: build
 build: build-wasm npm-link
 
+.PHONY: es5
+es5: 
+	wasm-pack build --target web --release --out-dir pkg-es
+
 .PHONY: build-wasm
 .ONESHELL:
 build-wasm:
