@@ -1,5 +1,5 @@
 .PHONY: build
-build: build-wasm npm-linkws
+build: build-wasm npm-link
 
 .PHONY: build-wasm
 .ONESHELL:

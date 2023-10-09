@@ -1,11 +1,37 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Hello wasm-pack!</title>
-  </head>
-  <body>
-    <noscript>This page contains webassembly and javascript content, please enable javascript in your browser.</noscript>
-    <script src="./bootstrap.js"></script>
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <title>Hello wasm-pack!</title>
+
+</head>
+
+<body>
+  <noscript>This page contains webassembly and javascript content, please enable javascript in your browser.</noscript>
+  <div>
+    <input type="file" id="files" style="display: none" onchange="fileImport()">
+    <input type="button" id="choosefile" value="选择一张彩色的png图片">
+  </div>
+  <img id="preview-img">
+  <script src="./bootstrap.js"></script>
+  <script>
+    document.getElementById("choosefile").onclick = function () {
+      document.getElementById("files").click();
+    }
+    function fileImport() {
+      //获取读取我文件的 File 对象
+      var selectedFile = document.getElementById('files').files[0];
+      var reader = new FileReader(); // 这是核心, 读取操作就是由它完成.
+      reader.readAsArrayBuffer(selectedFile); // 读取文件的内容,也可以读取文件的URL
+      reader.onload = function () {
+        var uint8Array = new Uint8Array(this.result);
+        window.u8Var = uint8Array;
+        wasm.grayscale(uint8Array);
+        wasm.crop(uint8Array, "#preview-img", "src", 0, 0, 200, 200);
+      }
+    }
+  </script>
+</body>
+
 </html>
